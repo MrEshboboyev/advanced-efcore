@@ -5,6 +5,7 @@ services:
       dockerfile: src/AdvancedEfCore.Api/Dockerfile
     ports:
       - "8080:8080"
+      - "8081:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=AdvancedEfCore;Username=postgres;Password=password123
