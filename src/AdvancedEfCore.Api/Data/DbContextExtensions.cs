@@ -75,14 +75,17 @@ public static class DbContextExtensions
                     SELECT 
                         u."Id" as UserId,
                         get_full_name(u."FirstName", u."LastName") as FullName,
-                        u."Email" as Email,
+                        u."Email",
                         COUNT(o."Id")::INTEGER as OrderCount,
                         COALESCE(SUM(o."Amount"), 0::DECIMAL(18,2)) as TotalSpent,
                         MAX(o."OrderDate") as LastOrderDate
                     FROM "Users" u
                     LEFT JOIN "Orders" o ON u."Id" = o."UserId"
                     WHERE u."IsActive" = true
-                    GROUP BY u."Id", u."FirstName", u."LastName", u."Email"
+                    GROUP BY 
+                        u."Id",
+                        get_full_name(u."FirstName", u."LastName"),  -- << Expression repeat here!
+                        u."Email"
                     HAVING COUNT(o."Id") > 0
                     ORDER BY TotalSpent DESC
                     LIMIT customer_limit;
